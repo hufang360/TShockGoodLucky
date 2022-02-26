@@ -64,12 +64,17 @@ namespace Plugin
         private void SetPlayerBuff(TSPlayer op)
         {
             // Max possible buff duration as of Terraria 1.4.2.3 is 35791393 seconds (415 days).
-			// var time = (int.MaxValue / 60) - 1;
-            // 1秒 60个嘀嗒
-            var time = _config.seconds * 60;
-            foreach (var id in _config.buff)
+            var timeLimit = (int.MaxValue / 60) - 1;
+
+            foreach (BuffData d in _config.buff)
             {
-			    op.SetBuff(id, time);
+                int id = d.id;
+                int time = d.seconds;
+
+                if (time < 0 || time > timeLimit)
+                    time = timeLimit;
+
+			    op.SetBuff(id, time*60);
             }
         }
 
@@ -79,6 +84,7 @@ namespace Plugin
             {
                 ServerApi.Hooks.ServerJoin.Deregister(this, OnServerJoin);
                 GetDataHandlers.PlayerSpawn -= new EventHandler<GetDataHandlers.SpawnEventArgs>(Rebirth);
+                GeneralHooks.ReloadEvent -= OnReload;
             }
             base.Dispose(disposing);
         }
