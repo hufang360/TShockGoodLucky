@@ -51,13 +51,21 @@ namespace Plugin
         // 进入时
         private void OnServerJoin(JoinEventArgs args)
         {
-           SetPlayerBuff(TShock.Players[args.Who]);
+            TSPlayer op = TShock.Players[args.Who];
+            if( _config.exclude.Contains(op.Name ) )
+                return;
+
+           SetPlayerBuff(op);
         }
 
         // 复活时
         private void Rebirth(object o, GetDataHandlers.SpawnEventArgs args)
         {
-            SetPlayerBuff(args.Player);
+            TSPlayer op = args.Player;
+            if( _config.exclude.Contains(op.Name ) )
+                return;
+
+            SetPlayerBuff(op);
         }
 
         // 设置buff

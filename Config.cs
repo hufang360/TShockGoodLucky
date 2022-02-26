@@ -10,6 +10,8 @@ namespace Plugin
     {
         public List<BuffData> buff = new List<BuffData>();
 
+        public List<string> exclude = new List<string>();
+
         public static Config Load(string path)
         {
             if (File.Exists(path))
